@@ -60,3 +60,9 @@ def check_win(board: list[list[str]], num_rows: int) -> bool:
     return check_win_rows(board, num_rows)\
            or check_win_cols(board, num_cols=num_rows)\
            or check_win_diagonals(board, num_rows)
+
+
+def no_moves_left(num_turns: int, size: int) -> bool:
+    if num_turns == size ** 2:
+        return True
+    return False

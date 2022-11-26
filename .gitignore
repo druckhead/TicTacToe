@@ -3,8 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# git
+.gitignore
+
 # PyCharm
-venv/
 .idea
 
 # macOS

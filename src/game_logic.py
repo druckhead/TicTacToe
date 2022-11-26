@@ -1,6 +1,8 @@
 
 def check_win_row(board: list[list[str]], row: int, len_col: int) -> bool:
     for col in range(len_col - 1):
+        if board[row][col] is None:
+            return False
         if board[row][col] != board[row][col + 1]:
             return False
     return True
@@ -15,6 +17,8 @@ def check_win_rows(board: list[list[str]], num_rows: int) -> bool:
 
 def check_win_col(board: list[list[str]], col: int, len_row: int) -> bool:
     for row in range(len_row - 1):
+        if board[row][col] is None:
+            return False
         if board[row][col] != board[row + 1][col]:
             return False
     return True
@@ -27,24 +31,29 @@ def check_win_cols(board: list[list[str]], num_cols: int) -> bool:
     return False
 
 
-def check_tl_br_diagonal_win(board: list[list[str]], num_rows: int) -> bool:
+def check_top_left_bottom_right_diagonal_win(board: list[list[str]], num_rows: int) -> bool:
     for row in range(num_rows - 1):
         for col in range(row, row + 1):
+            if board[row][col] is None:
+                return False
             if board[row][col] != board[row + 1][col + 1]:
                 return False
     return True
 
 
-def check_tr_bl_diagonal_win(board: list[list[str]], num_rows: int) -> bool:
+def check_top_right_bottom_left_diagonal_win(board: list[list[str]], num_rows: int) -> bool:
     for row in range(num_rows - 1, 0, -1):
         for col in range(num_rows - 1 - row, num_rows - row):
+            if board[row][col] is None:
+                return False
             if board[row][col] != board[row - 1][col + 1]:
                 return False
     return True
 
 
 def check_win_diagonals(board: list[list[str]], num_rows: int) -> bool:
-    return check_tr_bl_diagonal_win(board, num_rows) or check_tl_br_diagonal_win(board, num_rows)
+    return check_top_right_bottom_left_diagonal_win(board, num_rows)\
+           or check_top_left_bottom_right_diagonal_win(board, num_rows)
 
 
 def check_win(board: list[list[str]], num_rows: int) -> bool:

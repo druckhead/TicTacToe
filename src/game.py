@@ -1,6 +1,6 @@
 from game_logic import check_win
-from game_board import *
-from game_turns import *
+from game_board import get_board_size, initialize_board, display_current_board
+from game_turns import display_turn_prompt, get_user_turn, update_board_with_turn, toggle_turn, toggle_shape, Turn, Shape
 from os import system
 from random import randint
 

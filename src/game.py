@@ -58,6 +58,7 @@ def start_game() -> bool:
         display_turn_prompt(turn)
         row, col = get_user_turn(size)
         update_board_with_turn(board, row, col, shape)
+        num_turns += 1
         system("clear")
         display_current_board(board)
 
@@ -67,6 +68,5 @@ def start_game() -> bool:
 
         turn = toggle_turn(turn)
         shape = toggle_shape(shape)
-        num_turns += 1
 
-    return False
+    return True

@@ -1,4 +1,4 @@
-from game_logic import check_win
+from game_logic import check_win, game_stuck
 from game_board import get_board_size, initialize_board, display_current_board
 from game_turns import display_turn_prompt, get_user_turn, update_board_with_turn, toggle_turn, toggle_shape, Turn, \
     Shape, random_start_player
@@ -60,6 +60,8 @@ def start_game() -> bool:
                 game_over = True
                 winner = "Player 1" if turn == Turn.player1 else "Player 2"
                 print(f"The winner is: {winner}")
+            elif game_stuck(board):
+                game_over = True
 
         turn = toggle_turn(turn)
         shape = toggle_shape(shape)

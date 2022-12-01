@@ -1,3 +1,5 @@
+from src.game_turns import Shape
+
 
 def check_win_row(board: list[list[str]], row: int, len_col: int) -> bool:
     for col in range(len_col - 1):
@@ -52,17 +54,33 @@ def check_top_right_bottom_left_diagonal_win(board: list[list[str]], num_rows: i
 
 
 def check_win_diagonals(board: list[list[str]], num_rows: int) -> bool:
-    return check_top_right_bottom_left_diagonal_win(board, num_rows)\
+    return check_top_right_bottom_left_diagonal_win(board, num_rows) \
            or check_top_left_bottom_right_diagonal_win(board, num_rows)
 
 
 def check_win(board: list[list[str]], num_rows: int) -> bool:
-    return check_win_rows(board, num_rows)\
-           or check_win_cols(board, num_cols=num_rows)\
+    return check_win_rows(board, num_rows) \
+           or check_win_cols(board, num_cols=num_rows) \
            or check_win_diagonals(board, num_rows)
 
 
-def no_moves_left(num_turns: int, size: int) -> bool:
-    if num_turns == size ** 2:
-        return True
+# def no_moves_left(num_turns: int, size: int) -> bool:
+#     if num_turns == size ** 2:
+#         return True
+#     return False
+
+
+def row_stuck(board: list[list[str]], row: int, len_board: int):
+    if row < len_board:
+        if Shape.x.value in board[row] and Shape.o.value in board[row]:
+            return True and row_stuck(board, row + 1, len_board)
     return False
+
+
+def all_rows_stuck(board: list[list[str]], len_board: int):
+    return row_stuck(board, 0, len_board)
+
+
+def game_stuck(board: list[list[str]]) -> bool:
+    len_board = len(board)
+    return all_rows_stuck(board, len_board)

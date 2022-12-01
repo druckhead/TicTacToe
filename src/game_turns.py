@@ -1,4 +1,5 @@
 from enum import Enum
+from random import randint
 
 
 class Turn(Enum):
@@ -11,6 +12,14 @@ class Shape(Enum):
     o = "O"
 
 
+def random_start_player() -> tuple[Turn, Shape]:
+    rand_num = randint(1, 2)
+    player = Turn.player1 if rand_num == 1 else Turn.player2
+    rand_num = randint(1, 2)
+    shape = Shape.x if rand_num == 1 else Shape.o
+    return player.value, shape.value
+
+
 def toggle_turn(player: str) -> str:
     return Turn.player2.value if player == Turn.player1.value else Turn.player1.value
 
@@ -19,8 +28,10 @@ def toggle_shape(shape: str) -> str:
     return Shape.x.value if shape == Shape.o.value else Shape.o.value
 
 
-def display_turn_prompt(curr_turn: Enum) -> None:
-    player = "Player 1" if curr_turn == "p1" else "Player 2"
+def display_turn_prompt(curr_turn: Turn, curr_shape: Shape) -> None:
+    player = "Player 1" if curr_turn == Turn.player1.value else "Player 2"
+    shape = "X" if curr_shape == Shape.x.value else "O"
+    player += f"\nShape: {shape}"
     print(f"CURRENT TURN: {player}")
     print("Please enter cell coordinates to make your move (ex. B2)")
     return
@@ -52,6 +63,6 @@ def get_user_turn(size: int) -> tuple[int, int]:
     return row, col
 
 
-def update_board_with_turn(board: list[list[str | None]], row: int, col: int, shape: Enum) -> None:
+def update_board_with_turn(board: list[list[str | None]], row: int, col: int, shape: str) -> None:
     board[row][col] = shape
     return

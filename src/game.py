@@ -1,8 +1,8 @@
 from game_logic import check_win
 from game_board import get_board_size, initialize_board, display_current_board
-from game_turns import display_turn_prompt, get_user_turn, update_board_with_turn, toggle_turn, toggle_shape, Turn, Shape
+from game_turns import display_turn_prompt, get_user_turn, update_board_with_turn, toggle_turn, toggle_shape, Turn, \
+    Shape, random_start_player
 from os import system
-from random import randint
 
 
 def print_greeting() -> None:
@@ -31,18 +31,6 @@ def print_greeting() -> None:
     return
 
 
-def random_start_player():
-    rand_num = randint(1, 2)
-    player = Turn.player1.value if rand_num == 1 else Turn.player2.value
-    return player
-
-
-def random_start_shape():
-    rand_num = randint(1, 2)
-    shape = Shape.x.value if rand_num == 1 else Shape.o.value
-    return shape
-
-
 def start_game() -> bool:
     game_over: bool = False
     num_turns: int = 0
@@ -51,12 +39,17 @@ def start_game() -> bool:
     board = initialize_board(size)
     system("clear")
     display_current_board(board)
-    turn = random_start_player()
-    shape = random_start_shape()
+    turn, shape = random_start_player()
 
     while not game_over:
-        display_turn_prompt(turn)
+        display_turn_prompt(turn, shape)
         row, col = get_user_turn(size)
+        while board[row][col] == Shape.x.value or board[row][col] == Shape.o.value:
+            system("clear")
+            display_current_board(board)
+            print("Error: Cell already taken. Please choose an available cell.\n")
+            display_turn_prompt(turn, shape)
+            row, col = get_user_turn(size)
         update_board_with_turn(board, row, col, shape)
         num_turns += 1
         system("clear")
@@ -65,6 +58,8 @@ def start_game() -> bool:
         if num_turns >= 2 * size - 1:
             if check_win(board, size):
                 game_over = True
+                winner = "Player 1" if turn == Turn.player1 else "Player 2"
+                print(f"The winner is: {winner}")
 
         turn = toggle_turn(turn)
         shape = toggle_shape(shape)

@@ -62,6 +62,7 @@ def start_game() -> bool:
                 print(f"The winner is: {winner}")
             elif game_stuck(board):
                 game_over = True
+                print("Game is stuck. It's a Draw!")
 
         turn = toggle_turn(turn)
         shape = toggle_shape(shape)

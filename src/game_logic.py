@@ -72,11 +72,11 @@ def check_win(board: list[list[str]], num_rows: int) -> bool:
 # row stuck
 def row_stuck(board: list[list[str]], row: int, len_board: int):
     if row < len_board:
-        if __debug__:
-            print(board[row])
         if Shape.x.value in board[row] and Shape.o.value in board[row]:
             return True and row_stuck(board, row + 1, len_board)
-    return False
+        else:
+            return False
+    return True
 
 
 # all rows stuck
@@ -85,22 +85,44 @@ def all_rows_stuck(board: list[list[str]], len_board: int):
 
 
 def col_stuck(board: list[list[str]], col: int, len_board: int):
-    curr_column: list[str] = []
-    for row in range(len_board):
-        curr_column.append(board[row][col])
-    if __debug__:
-        print(curr_column)
     if col < len_board:
+        curr_column: list[str] = []
+        for row in range(len_board):
+            curr_column.append(board[row][col])
         if Shape.x.value in curr_column and Shape.o.value in curr_column:
             return True and col_stuck(board, col + 1, len_board)
-    return False
+        else:
+            return False
+    return True
 
 
 def all_cols_stuck(board: list[list[str]], len_board: int):
     return col_stuck(board, 0, len_board)
 
 
+def tl_br_diag_stuck(board: list[list[str]], len_board: int):
+    tl_br_diag: list[str] = []
+    for row in range(len_board):
+        for col in range(row, row + 1):
+            tl_br_diag.append(board[row][col])
+    if Shape.x.value in tl_br_diag and Shape.o.value in tl_br_diag:
+        return True
+    return False
+
+
+def tr_bl_diag_stuck(board: list[list[str]], len_board: int):
+    tr_bl_diag: list[str] = []
+    for row in range(len_board - 1, 0, -1):
+        for col in range(len_board - 1 - row, len_board - row):
+            tr_bl_diag.append(board[row][col])
+    if Shape.x.value in tr_bl_diag and Shape.o.value in tr_bl_diag:
+        return True
+    return False
+
+
 # driver for game stuck helper funcs
 def game_stuck(board: list[list[str]]) -> bool:
     len_board = len(board)
-    return not (not all_rows_stuck(board, len_board) and not all_cols_stuck(board, len_board))
+    full_stack = all_rows_stuck(board, len_board) and all_cols_stuck(board, len_board) and \
+                 tl_br_diag_stuck(board, len_board) and tr_bl_diag_stuck(board, len_board)
+    return full_stack

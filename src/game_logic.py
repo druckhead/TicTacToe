@@ -64,23 +64,43 @@ def check_win(board: list[list[str]], num_rows: int) -> bool:
            or check_win_diagonals(board, num_rows)
 
 
-# def no_moves_left(num_turns: int, size: int) -> bool:
-#     if num_turns == size ** 2:
-#         return True
-#     return False
+# **************************************************************************
+#                               GAME STUCK
+# **************************************************************************
 
 
+# row stuck
 def row_stuck(board: list[list[str]], row: int, len_board: int):
     if row < len_board:
+        if __debug__:
+            print(board[row])
         if Shape.x.value in board[row] and Shape.o.value in board[row]:
             return True and row_stuck(board, row + 1, len_board)
     return False
 
 
+# all rows stuck
 def all_rows_stuck(board: list[list[str]], len_board: int):
     return row_stuck(board, 0, len_board)
 
 
+def col_stuck(board: list[list[str]], col: int, len_board: int):
+    curr_column: list[str] = []
+    for row in range(len_board):
+        curr_column.append(board[row][col])
+    if __debug__:
+        print(curr_column)
+    if col < len_board:
+        if Shape.x.value in curr_column and Shape.o.value in curr_column:
+            return True and col_stuck(board, col + 1, len_board)
+    return False
+
+
+def all_cols_stuck(board: list[list[str]], len_board: int):
+    return col_stuck(board, 0, len_board)
+
+
+# driver for game stuck helper funcs
 def game_stuck(board: list[list[str]]) -> bool:
     len_board = len(board)
-    return all_rows_stuck(board, len_board)
+    return not (not all_rows_stuck(board, len_board) and not all_cols_stuck(board, len_board))

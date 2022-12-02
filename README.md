@@ -1,3 +1,3 @@
 # TicTacToe
 
-Made by Druckhead & Ziv Attias (<a href="https://github.com/zivattias">zivattias</a>)
+Made by Daniel Raz (druckhead) & Ziv Attias (<a href="https://github.com/zivattias">zivattias</a>)

@@ -1,4 +1,5 @@
-from src.game_turns import Shape
+from src.game_turns import Shape, toggle_shape
+from copy import deepcopy
 
 
 def check_win_row(board: list[list[str]], row: int, len_col: int) -> bool:
@@ -68,61 +69,25 @@ def check_win(board: list[list[str]], num_rows: int) -> bool:
 #                               GAME STUCK
 # **************************************************************************
 
-
-# row stuck
-def row_stuck(board: list[list[str]], row: int, len_board: int):
-    if row < len_board:
-        if Shape.x.value in board[row] and Shape.o.value in board[row]:
-            return True and row_stuck(board, row + 1, len_board)
-        else:
-            return False
-    return True
-
-
-# all rows stuck
-def all_rows_stuck(board: list[list[str]], len_board: int):
-    return row_stuck(board, 0, len_board)
-
-
-def col_stuck(board: list[list[str]], col: int, len_board: int):
-    if col < len_board:
-        curr_column: list[str] = []
-        for row in range(len_board):
-            curr_column.append(board[row][col])
-        if Shape.x.value in curr_column and Shape.o.value in curr_column:
-            return True and col_stuck(board, col + 1, len_board)
-        else:
-            return False
-    return True
-
-
-def all_cols_stuck(board: list[list[str]], len_board: int):
-    return col_stuck(board, 0, len_board)
-
-
-def tl_br_diag_stuck(board: list[list[str]], len_board: int):
-    tl_br_diag: list[str] = []
+def stuck(board: list[list[str]], len_board: int, curr_shape: str) -> int:
+    count = 0
     for row in range(len_board):
-        for col in range(row, row + 1):
-            tl_br_diag.append(board[row][col])
-    if Shape.x.value in tl_br_diag and Shape.o.value in tl_br_diag:
-        return True
-    return False
-
-
-def tr_bl_diag_stuck(board: list[list[str]], len_board: int):
-    tr_bl_diag: list[str] = []
-    for row in range(len_board - 1, 0, -1):
-        for col in range(len_board - 1 - row, len_board - row):
-            tr_bl_diag.append(board[row][col])
-    if Shape.x.value in tr_bl_diag and Shape.o.value in tr_bl_diag:
-        return True
-    return False
+        for col in range(len_board):
+            next_turn_board = deepcopy(board)
+            if next_turn_board[row][col] is None:
+                next_turn_board[row][col] = curr_shape
+                if check_win(next_turn_board, len_board):
+                    count += 1
+                    continue
+    return count
 
 
 # driver for game stuck helper funcs
-def game_stuck(board: list[list[str]]) -> bool:
-    len_board = len(board)
-    full_stack = all_rows_stuck(board, len_board) and all_cols_stuck(board, len_board) and \
-                 tl_br_diag_stuck(board, len_board) and tr_bl_diag_stuck(board, len_board)
-    return full_stack
+def game_stuck(board: list[list[str]], len_board: int, curr_shape: str) -> bool:
+    # assumes no "stupid" moves are made
+    next_shape = toggle_shape(curr_shape)
+    if stuck(board, len_board, curr_shape) >= 2:
+        return False
+    if stuck(board, len_board, next_shape) >= 1:
+        return False
+    return True

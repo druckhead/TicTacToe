@@ -60,9 +60,11 @@ def start_game() -> bool:
                 game_over = True
                 winner = "Player 1" if turn == Turn.player1 else "Player 2"
                 print(f"The winner is: {winner}")
-            elif game_stuck(board):
+                continue
+            elif game_stuck(board, size, shape):
                 game_over = True
                 print("Game is stuck. It's a Draw!")
+                continue
 
         turn = toggle_turn(turn)
         shape = toggle_shape(shape)

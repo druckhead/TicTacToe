@@ -66,7 +66,7 @@ def start_game() -> bool:
                 game_over = True
                 print("Game is stuck. It's a Draw!")
                 continue
-
+        # Toggle shapes and turns each turn:
         turn = toggle_turn(turn)
         shape = toggle_shape(shape)
 

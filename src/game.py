@@ -30,7 +30,7 @@ def print_greeting() -> None:
     print()
     return
 
-
+# Game flow assorted by chornological functions:
 def start_game() -> bool:
     game_over: bool = False
     num_turns: int = 0
@@ -54,13 +54,14 @@ def start_game() -> bool:
         num_turns += 1
         system("clear")
         display_current_board(board)
-
+        # Check win starts after (2 * board_size -1) turns:
         if num_turns >= 2 * size - 1:
             if check_win(board, size):
                 game_over = True
                 winner = "Player 1" if turn == Turn.player1 else "Player 2"
                 print(f"The winner is: {winner}")
                 continue
+            # Checks if game is stuck (bonus):
             elif game_stuck(board, size, shape):
                 game_over = True
                 print("Game is stuck. It's a Draw!")

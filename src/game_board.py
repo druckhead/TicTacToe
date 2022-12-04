@@ -1,3 +1,4 @@
+# Get board size from user (size*size):
 def get_board_size() -> int:
     while True:
         size = input('> X/O: Enter your board size (ex: 3 for 3 rows & 3 columns)\n'
@@ -12,7 +13,7 @@ def get_board_size() -> int:
                 break
     return size
 
-
+# Create board by given sizes:
 def initialize_board(size: int) -> list[list]:
     board: list[list[None]] = list()
     for row in range(size):
@@ -46,7 +47,7 @@ def pprint_board(board: list[list[str]]) -> str:
     board_str += f'  {"-" * (len_board * 4 + 1)}\n'
     return board_str
 
-
+# A function to display board at given state:
 def display_current_board(board: list[list[str]]) -> None:
     print(pprint_board(board))
     return
